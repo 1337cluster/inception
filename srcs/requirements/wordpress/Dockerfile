@@ -5,14 +5,19 @@ RUN apt-get update && apt-get install -y \
     php-fpm \
     php-mysqli \
     default-mysql-client \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY wordpress.conf wordpress.conf 
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
 
-COPY tool.sh tool.sh
+COPY wordpress.conf /etc/php/8.2/fpm/pool.d/www.conf
 
-RUN chmod +x tool.sh 
+COPY tool.sh /tool.sh
+
+RUN chmod +x /tool.sh 
 
 EXPOSE 9000
 
-ENTRYPOINT ["tool.sh"]
+ENTRYPOINT ["/tool.sh"]
