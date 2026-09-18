@@ -9,13 +9,13 @@ if [ ! -f wp-config.php ]; then
     
     wp core download --allow-root --path=/var/www/html
 
-wp config create --allow-root --path=/var/www/html --skip-check \
+    wp config create --allow-root --path=/var/www/html  \
         --dbname="$DB_NAME" \
         --dbuser="$DB_USER" \
         --dbpass="$(cat /run/secrets/db_password)" \
         --dbhost="mariadb:3306"
 
-    # Added critical space right before the backslash \
+    
     wp core install --allow-root --path=/var/www/html \
         --url="https://$DOMAIN_NAME" \
         --title="$Inception" \
